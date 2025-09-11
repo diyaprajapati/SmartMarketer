@@ -1,0 +1,53 @@
+# Core ML and Data Science
+numpy>=1.21.0
+pandas>=1.3.0
+scikit-learn>=1.0.0
+scipy>=1.7.0
+
+# Web Framework
+flask>=2.0.0
+flask-cors>=3.0.0
+
+# Advanced ML Models
+xgboost>=1.5.0
+lightgbm>=3.3.0
+catboost>=1.0.0
+tensorflow>=2.8.0
+
+# Time Series and Forecasting
+statsmodels>=0.13.0
+
+# Data Visualization
+matplotlib>=3.5.0
+seaborn>=0.11.0
+plotly>=5.0.0
+
+# Anomaly Detection
+pyod>=1.0.0
+
+# Network Analysis
+networkx>=2.6.0
+
+# Model Persistence
+joblib>=1.1.0
+dill>=0.3.0
+
+# Database
+sqlite3
+
+# Utilities
+python-dateutil>=2.8.0
+tqdm>=4.62.0
+
+# Development and Testing
+pytest>=6.0.0
+pytest-cov>=3.0.0
+black>=22.0.0
+flake8>=4.0.0
+
+# Optional: Advanced Drift Detection
+# alibi-detect>=0.10.0  # Uncomment if needed
+
+# Production
+gunicorn>=20.0.0
+redis>=4.0.0

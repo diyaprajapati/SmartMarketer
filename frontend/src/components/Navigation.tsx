@@ -10,7 +10,8 @@ export const Navigation = () => {
     { label: "Features", href: "#features" },
     { label: "How it Works", href: "#how-it-works" },
     { label: "Testimonials", href: "#testimonials" },
-    { label: "Contact", href: "#contact" }
+    { label: "ML Dashboard", href: "/dashboard" },
+    { label: "Contact", href: "#contact" },
   ];
 
   return (
@@ -41,22 +42,16 @@ export const Navigation = () => {
           <div className="hidden md:flex items-center gap-4">
             <ThemeToggle />
             <Button variant="ghost">Sign In</Button>
-            <Button variant="hero" size="sm">Get Started</Button>
+            <Button variant="hero" size="sm">
+              Get Started
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-2">
             <ThemeToggle />
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? (
-                <X className="w-5 h-5" />
-              ) : (
-                <Menu className="w-5 h-5" />
-              )}
+            <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </Button>
           </div>
         </div>
@@ -76,8 +71,12 @@ export const Navigation = () => {
                 </a>
               ))}
               <div className="flex flex-col gap-2 pt-4 border-t border-border">
-                <Button variant="ghost" className="justify-start">Sign In</Button>
-                <Button variant="hero" size="sm" className="justify-start">Get Started</Button>
+                <Button variant="ghost" className="justify-start">
+                  Sign In
+                </Button>
+                <Button variant="hero" size="sm" className="justify-start">
+                  Get Started
+                </Button>
               </div>
             </div>
           </div>
