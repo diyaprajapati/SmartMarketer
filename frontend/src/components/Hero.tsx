@@ -7,14 +7,10 @@ export const Hero = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-secondary/20 to-accent/20" />
-      
+
       {/* Hero image overlay */}
       <div className="absolute inset-0 opacity-10">
-        <img
-          src={heroImage}
-          alt="SmartMarketer Platform"
-          className="w-full h-full object-cover"
-        />
+        <img src={heroImage} alt="SmartMarketer Platform" className="w-full h-full object-cover" />
       </div>
 
       <div className="relative z-10 container mx-auto px-6 text-center">
@@ -26,10 +22,7 @@ export const Hero = () => {
 
         {/* Main headline */}
         <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-          Buy Smart,{" "}
-          <span className="bg-gradient-primary bg-clip-text text-transparent">
-            Sell Smarter
-          </span>
+          Buy Smart, <span className="bg-gradient-primary bg-clip-text text-transparent">Sell Smarter</span>
           <br />
           with Dynamic Pricing
         </h1>
@@ -42,12 +35,14 @@ export const Hero = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-          <Button variant="hero" size="lg" className="text-lg px-8 py-6 h-auto">
-            Get Started
-            <ArrowRight className="w-5 h-5" />
+          <Button variant="hero" size="lg" className="text-lg px-8 py-6 h-auto" asChild>
+            <a href="/pricing">
+              Try Live Pricing
+              <ArrowRight className="w-5 h-5" />
+            </a>
           </Button>
-          <Button variant="outline" size="lg" className="text-lg px-8 py-6 h-auto">
-            View Listings
+          <Button variant="outline" size="lg" className="text-lg px-8 py-6 h-auto" asChild>
+            <a href="/dashboard">ML Dashboard</a>
           </Button>
         </div>
 

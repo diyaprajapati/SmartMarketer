@@ -79,20 +79,58 @@ This project transforms a simple ride-sharing concept into a comprehensive ML-po
 
 ```bash
 # Python 3.8+
-pip install flask flask-cors scikit-learn numpy pandas matplotlib seaborn
-pip install tensorflow xgboost lightgbm catboost statsmodels pyod networkx joblib
+pip install -r requirements.txt
+
+# Includes both Flask and FastAPI dependencies:
+# - Flask: Traditional web framework
+# - FastAPI: Modern async API framework
+# - ML libraries: scikit-learn, tensorflow, xgboost, etc.
 
 # Node.js 16+
 npm install
 ```
 
+## ⚡ FastAPI vs Flask
+
+### **Why FastAPI?**
+
+| Feature             | Flask    | FastAPI            |
+| ------------------- | -------- | ------------------ |
+| **Performance**     | Standard | **2-3x Faster**    |
+| **API Docs**        | Manual   | **Auto-Generated** |
+| **Validation**      | Manual   | **Automatic**      |
+| **Type Safety**     | Optional | **Built-in**       |
+| **Async Support**   | Limited  | **Native**         |
+| **Modern Features** | Basic    | **Advanced**       |
+
+### **FastAPI Benefits:**
+
+- 🚀 **High Performance**: Built on Starlette/Uvicorn for speed
+- 📖 **Interactive Docs**: Automatic Swagger UI and ReDoc
+- ✅ **Data Validation**: Pydantic models ensure type safety
+- 🔄 **Async/Await**: Native async support for better concurrency
+- 🎯 **Developer Experience**: Better error messages and IDE support
+
 ### Running the System
 
 1. **Start the ML Backend**:
 
+**Option A: FastAPI (Recommended - High Performance)**
+
+```bash
+cd ml-backend
+python advanced_fastapi.py
+# or use the launcher
+python start_api.py --fastapi
+```
+
+**Option B: Flask (Traditional)**
+
 ```bash
 cd ml-backend
 python advanced_api.py
+# or use the launcher
+python start_api.py --flask
 ```
 
 2. **Start the Frontend**:
@@ -104,6 +142,16 @@ npm run dev
 ```
 
 3. **Access the Application**:
+
+**With FastAPI (Port 8000):**
+
+- **Main App**: http://localhost:5173
+- **ML Dashboard**: http://localhost:5173/dashboard
+- **API Documentation**: http://localhost:8000
+- **Interactive Swagger UI**: http://localhost:8000/docs
+- **ReDoc Documentation**: http://localhost:8000/redoc
+
+**With Flask (Port 5000):**
 
 - **Main App**: http://localhost:5173
 - **ML Dashboard**: http://localhost:5173/dashboard

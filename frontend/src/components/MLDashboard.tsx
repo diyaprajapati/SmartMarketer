@@ -55,7 +55,8 @@ export const MLDashboard = () => {
   const [testResults, setTestResults] = useState<any>(null);
 
   // API Base URL - update this to match your backend
-  const API_BASE = "http://localhost:5000/api";
+  // FastAPI runs on port 8000, Flask runs on port 5000
+  const API_BASE = "http://localhost:8000/api";
 
   useEffect(() => {
     fetchDashboardData();
@@ -156,6 +157,49 @@ export const MLDashboard = () => {
       if (!response.ok) throw new Error("Demand forecasting failed");
       const result = await response.json();
       setTestResults({ type: "demand", data: result });
+    } catch (err) {
+      setTestResults({ type: "error", data: err instanceof Error ? err.message : "Unknown error" });
+    }
+  };
+
+  const trainAllModels = async () => {
+    try {
+      setTestResults({ type: "training", data: "Starting model training..." });
+
+      const response = await fetch(`${API_BASE}/models/train`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          models: ["all"],
+          use_synthetic_data: true,
+          config: {},
+        }),
+      });
+
+      if (!response.ok) throw new Error("Model training failed");
+      const result = await response.json();
+      setTestResults({ type: "training", data: result });
+
+      // Refresh dashboard data after training
+      setTimeout(fetchDashboardData, 2000);
+    } catch (err) {
+      setTestResults({ type: "error", data: err instanceof Error ? err.message : "Unknown error" });
+    }
+  };
+
+  const saveModels = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/models/save`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          models: ["all"],
+        }),
+      });
+
+      if (!response.ok) throw new Error("Model saving failed");
+      const result = await response.json();
+      setTestResults({ type: "save", data: result });
     } catch (err) {
       setTestResults({ type: "error", data: err instanceof Error ? err.message : "Unknown error" });
     }
@@ -316,23 +360,52 @@ export const MLDashboard = () => {
         <TabsContent value="testing" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Model Testing</CardTitle>
-              <CardDescription>Test individual ML models with sample data</CardDescription>
+              <CardTitle>Model Testing & Training</CardTitle>
+              <CardDescription>Test individual ML models and train new models</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <Button onClick={testPricingModel} className="flex items-center gap-2">
-                  <DollarSign className="w-4 h-4" />
-                  Test Pricing Model
-                </Button>
-                <Button onClick={testFraudDetection} className="flex items-center gap-2">
-                  <Shield className="w-4 h-4" />
-                  Test Fraud Detection
-                </Button>
-                <Button onClick={testDemandForecasting} className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4" />
-                  Test Demand Forecast
-                </Button>
+              <div className="space-y-6">
+                {/* Model Testing Section */}
+                <div>
+                  <h3 className="text-lg font-medium mb-4">Model Testing</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Button onClick={testPricingModel} className="flex items-center gap-2">
+                      <DollarSign className="w-4 h-4" />
+                      Test Pricing Model
+                    </Button>
+                    <Button onClick={testFraudDetection} className="flex items-center gap-2">
+                      <Shield className="w-4 h-4" />
+                      Test Fraud Detection
+                    </Button>
+                    <Button onClick={testDemandForecasting} className="flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4" />
+                      Test Demand Forecast
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Model Training Section */}
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-medium mb-4">Model Training & Management</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Button
+                      onClick={trainAllModels}
+                      className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                      size="lg"
+                    >
+                      <Brain className="w-5 h-5" />
+                      Train All Models
+                    </Button>
+                    <Button onClick={saveModels} variant="outline" className="flex items-center gap-2" size="lg">
+                      <Activity className="w-5 h-5" />
+                      Save Models
+                    </Button>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Training will create new models using synthetic data and update the system. This may take several
+                    minutes.
+                  </p>
+                </div>
               </div>
 
               {testResults && (

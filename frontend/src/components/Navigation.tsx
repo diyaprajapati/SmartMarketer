@@ -9,7 +9,7 @@ export const Navigation = () => {
   const navItems = [
     { label: "Features", href: "#features" },
     { label: "How it Works", href: "#how-it-works" },
-    { label: "Testimonials", href: "#testimonials" },
+    { label: "Live Pricing", href: "/pricing" },
     { label: "ML Dashboard", href: "/dashboard" },
     { label: "Contact", href: "#contact" },
   ];
