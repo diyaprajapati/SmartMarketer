@@ -219,6 +219,22 @@ async def register_user(user: UserRegistration):
         user_data['registered_at'] = datetime.now().isoformat()
         user_data['status'] = 'active'
         
+        # Update city supply/demand counters
+        global city_stats
+        existing = city_stats.get(user.city, {'riders': 0, 'drivers': 0})
+        if user.user_type == 'rider':
+            existing['riders'] = existing.get('riders', 0) + 1
+        else:
+            existing['drivers'] = existing.get('drivers', 0) + 1
+        existing['last_updated'] = datetime.now().isoformat()
+        city_stats[user.city] = existing
+
+        # Trigger an immediate broadcast with latest counts and pricing
+        try:
+            await send_city_price_update(user.city, user.area)
+        except Exception as e:
+            logger.error(f"Failed to send immediate city update: {e}")
+
         return {
             "message": f"{user.user_type.title()} registered successfully",
             "user_id": user.user_id,
@@ -282,6 +298,15 @@ async def update_supply_demand(data: CitySupplyDemand):
             'last_updated': datetime.now().isoformat()
         }
         
+        # Trigger an immediate broadcast with latest counts and pricing
+        try:
+            # Pick a stable area if available
+            areas = get_city_areas(data.city)
+            area = areas[0] if areas else ""
+            await send_city_price_update(data.city, area)
+        except Exception as e:
+            logger.error(f"Failed to broadcast on supply-demand update: {e}")
+
         return {
             "message": "Supply/demand updated",
             "city": data.city,
@@ -299,6 +324,22 @@ async def get_city_stats():
         "timestamp": datetime.now().isoformat()
     }
 
+@app.get("/api/city-stats/{city}")
+async def get_city_stats_for_city(city: str):
+    """Get current supply/demand stats for a city"""
+    stats = city_stats.get(city, {'riders': 0, 'drivers': 0})
+    ratio = round(stats.get('riders', 0) / max(stats.get('drivers', 0), 1), 2)
+    return {
+        "city": city,
+        "supply_demand": {
+            "riders": stats.get('riders', 0),
+            "drivers": stats.get('drivers', 0),
+            "ratio": ratio
+        },
+        "last_updated": stats.get('last_updated', datetime.now().isoformat()),
+        "timestamp": datetime.now().isoformat()
+    }
+
 @app.websocket("/ws/{city}")
 async def websocket_endpoint(websocket: WebSocket, city: str):
     """WebSocket endpoint for real-time price updates"""
@@ -311,77 +352,62 @@ async def websocket_endpoint(websocket: WebSocket, city: str):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 
+async def send_city_price_update(city: str, area: str = ""):
+    """Compute and send a price update for a city using current stats (no random)."""
+    # Determine current stats with sensible defaults
+    stats = city_stats.get(city, {'riders': 50, 'drivers': 30})
+    current_riders = max(0, stats.get('riders', 0))
+    current_drivers = max(0, stats.get('drivers', 0))
+
+    # Choose an area if not provided
+    if not area:
+        areas = get_city_areas(city)
+        area = areas[0] if areas else ""
+
+    # Calculate price for both user types
+    rider_price = pricing_model.predict_price(
+        city=city,
+        user_type="rider",
+        area=area,
+        current_riders=current_riders,
+        current_drivers=current_drivers
+    )
+
+    driver_price = pricing_model.predict_price(
+        city=city,
+        user_type="driver",
+        area=area,
+        current_riders=current_riders,
+        current_drivers=current_drivers
+    )
+
+    update_data = {
+        "type": "price_update",
+        "city": city,
+        "area": area,
+        "timestamp": datetime.now().isoformat(),
+        "supply_demand": {
+            "riders": current_riders,
+            "drivers": current_drivers,
+            "ratio": round(current_riders / max(current_drivers, 1), 2)
+        },
+        "pricing": {
+            "rider": rider_price,
+            "driver": driver_price
+        }
+    }
+
+    await manager.send_to_city(city, update_data)
+
 async def price_update_task():
-    """Background task to send price updates every 10 seconds"""
-    await asyncio.sleep(5)  # Wait for startup
-    
+    """Background task to send price updates every 10 seconds using actual counts."""
+    await asyncio.sleep(5)
     while True:
         try:
-            # Generate price updates for cities with active connections
-            for city in manager.city_subscribers.keys():
+            for city in list(manager.city_subscribers.keys()):
                 if len(manager.city_subscribers[city]) > 0:
-                    # Get current stats or use defaults
-                    stats = city_stats.get(city, {'riders': 50, 'drivers': 30})
-                    
-                    # Add some random variation to simulate real-time changes
-                    import random
-                    riders_variation = random.randint(-10, 15)
-                    drivers_variation = random.randint(-5, 8)
-                    
-                    current_riders = max(10, stats['riders'] + riders_variation)
-                    current_drivers = max(5, stats['drivers'] + drivers_variation)
-                    
-                    # Get areas for this city
-                    areas = get_city_areas(city)
-                    if areas:
-                        area = random.choice(areas)
-                        
-                        # Calculate price for both user types
-                        rider_price = pricing_model.predict_price(
-                            city=city,
-                            user_type="rider",
-                            area=area,
-                            current_riders=current_riders,
-                            current_drivers=current_drivers
-                        )
-                        
-                        driver_price = pricing_model.predict_price(
-                            city=city,
-                            user_type="driver",
-                            area=area,
-                            current_riders=current_riders,
-                            current_drivers=current_drivers
-                        )
-                        
-                        # Send update to city subscribers
-                        update_data = {
-                            "type": "price_update",
-                            "city": city,
-                            "area": area,
-                            "timestamp": datetime.now().isoformat(),
-                            "supply_demand": {
-                                "riders": current_riders,
-                                "drivers": current_drivers,
-                                "ratio": round(current_riders / max(current_drivers, 1), 2)
-                            },
-                            "pricing": {
-                                "rider": rider_price,
-                                "driver": driver_price
-                            }
-                        }
-                        
-                        await manager.send_to_city(city, update_data)
-                        
-                        # Update global stats
-                        city_stats[city] = {
-                            'riders': current_riders,
-                            'drivers': current_drivers,
-                            'last_updated': datetime.now().isoformat()
-                        }
-            
-            # Wait 10 seconds before next update
+                    await send_city_price_update(city)
             await asyncio.sleep(10)
-            
         except Exception as e:
             logger.error(f"Price update task error: {e}")
             await asyncio.sleep(10)

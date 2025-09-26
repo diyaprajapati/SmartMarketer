@@ -86,13 +86,10 @@ export const DynamicPricing: React.FC<DynamicPricingProps> = ({ userData, onBack
   const WS_BASE = "ws://localhost:8000";
 
   useEffect(() => {
-    // Initial price fetch
-    fetchCurrentPrice();
+    // Initialize with actual city stats, then connect WS and timers
+    initializeFromCityStats();
 
-    // Setup WebSocket connection
     connectWebSocket();
-
-    // Setup countdown timer
     startCountdown();
 
     return () => {
@@ -167,7 +164,7 @@ export const DynamicPricing: React.FC<DynamicPricingProps> = ({ userData, onBack
     }, 1000);
   };
 
-  const fetchCurrentPrice = async () => {
+  const fetchCurrentPrice = async (overrideCounts?: SupplyDemandData) => {
     try {
       const response = await fetch(`${API_BASE}/api/price`, {
         method: "POST",
@@ -178,8 +175,8 @@ export const DynamicPricing: React.FC<DynamicPricingProps> = ({ userData, onBack
           city: userData.city,
           user_type: userData.user_type,
           area: userData.area,
-          current_riders: supplyDemand.riders,
-          current_drivers: supplyDemand.drivers,
+          current_riders: overrideCounts ? overrideCounts.riders : supplyDemand.riders,
+          current_drivers: overrideCounts ? overrideCounts.drivers : supplyDemand.drivers,
           user_rating: userData.rating,
           trips_completed: userData.trips_completed,
         }),
@@ -198,6 +195,29 @@ export const DynamicPricing: React.FC<DynamicPricingProps> = ({ userData, onBack
         description: "Could not get current price. Please try again.",
         variant: "destructive",
       });
+    }
+  };
+
+  const initializeFromCityStats = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/city-stats/${encodeURIComponent(userData.city)}`);
+      if (res.ok) {
+        const data = await res.json();
+        const counts: SupplyDemandData = {
+          riders: data.supply_demand?.riders ?? supplyDemand.riders,
+          drivers: data.supply_demand?.drivers ?? supplyDemand.drivers,
+          ratio: data.supply_demand?.ratio ?? supplyDemand.ratio,
+        };
+        setSupplyDemand(counts);
+        // Use the fetched counts for the initial price request
+        await fetchCurrentPrice(counts);
+      } else {
+        // Fallback to existing state if API fails
+        await fetchCurrentPrice();
+      }
+    } catch (e) {
+      console.error("Failed to load city stats:", e);
+      await fetchCurrentPrice();
     }
   };
 

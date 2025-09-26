@@ -303,9 +303,9 @@ class CityPricingModel:
             user_type_encoded = 0 if user_type == 'driver' else 1
             area_encoded = 0
         
-        # Synthetic features (in real app, these would come from external sources)
-        weather_impact = np.random.uniform(0.9, 1.1)  # Slight weather variation
-        event_multiplier = 1.0  # No events by default
+        # Synthetic features (fixed to ensure deterministic pricing per counts)
+        weather_impact = 1.0
+        event_multiplier = 1.0
         
         features = np.array([[
             city_encoded, user_type_encoded, area_encoded, hour,
