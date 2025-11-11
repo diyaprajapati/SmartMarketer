@@ -110,6 +110,9 @@ class CitySupplyDemand(BaseModel):
 # Global supply/demand tracking
 city_stats = {}
 
+# Track last update time to prevent duplicate updates (debouncing)
+last_update_time = {}
+
 def initialize_model():
     """Initialize or load the pricing model"""
     global pricing_model
@@ -144,8 +147,9 @@ app.add_middleware(
 async def startup_event():
     """Initialize model on startup"""
     initialize_model()
-    # Start background task for price updates
-    asyncio.create_task(price_update_task())
+    # Event-driven updates only - no background periodic task
+    # Prices update only when new drivers/riders are added
+    logger.info("✅ Event-driven pricing system initialized (no periodic updates)")
 
 @app.get("/")
 async def root():
@@ -250,7 +254,7 @@ async def register_user(user: UserRegistration):
 
 @app.post("/api/price")
 async def get_price(request: PriceRequest):
-    """Get current dynamic price"""
+    """Get current dynamic price - all riders see the same base price based on market conditions"""
     try:
         if not pricing_model:
             raise HTTPException(status_code=503, detail="Pricing model not available")
@@ -263,21 +267,29 @@ async def get_price(request: PriceRequest):
             'last_updated': datetime.now().isoformat()
         }
         
-        # Get price prediction
+        # Use standard values for base price calculation to ensure all riders see the same price
+        # In real ride-sharing apps, base price is the same for all users in the same area
+        # User-specific features (rating, trips) don't affect base fare, only driver matching priority
+        STANDARD_RATING = 4.0
+        STANDARD_TRIPS = 50
+        
+        # Get price prediction using standard values (same for all riders)
         price_data = pricing_model.predict_price(
             city=request.city,
             user_type=request.user_type,
             area=request.area,
             current_riders=request.current_riders,
             current_drivers=request.current_drivers,
-            user_rating=request.user_rating,
-            trips_completed=request.trips_completed
+            user_rating=STANDARD_RATING,  # Use standard value, not user-specific
+            trips_completed=STANDARD_TRIPS  # Use standard value, not user-specific
         )
         
         # Add additional info
         price_data['request_time'] = datetime.now().isoformat()
         price_data['user_type'] = request.user_type
         price_data['area'] = request.area
+        # Note: user_rating and trips_completed are stored but not used for pricing
+        # They can be used for driver matching or loyalty programs in the future
         
         return price_data
         
@@ -353,7 +365,22 @@ async def websocket_endpoint(websocket: WebSocket, city: str):
         manager.disconnect(websocket)
 
 async def send_city_price_update(city: str, area: str = ""):
-    """Compute and send a price update for a city using current stats (no random)."""
+    """Compute and send a price update for a city using current stats.
+    Includes debouncing to prevent duplicate updates within 1 second.
+    """
+    # Debounce mechanism: Prevent duplicate updates within 1 second
+    global last_update_time
+    current_time = datetime.now()
+    
+    if city in last_update_time:
+        time_diff = (current_time - last_update_time[city]).total_seconds()
+        if time_diff < 1.0:  # Skip if updated within last 1 second
+            logger.debug(f"Skipping duplicate update for {city} (updated {time_diff:.2f}s ago)")
+            return
+    
+    # Update the last update time
+    last_update_time[city] = current_time
+    
     # Determine current stats with sensible defaults
     stats = city_stats.get(city, {'riders': 50, 'drivers': 30})
     current_riders = max(0, stats.get('riders', 0))
@@ -398,19 +425,13 @@ async def send_city_price_update(city: str, area: str = ""):
     }
 
     await manager.send_to_city(city, update_data)
+    logger.info(f"✅ Price update sent for {city}: {current_riders} riders, {current_drivers} drivers")
 
-async def price_update_task():
-    """Background task to send price updates every 10 seconds using actual counts."""
-    await asyncio.sleep(5)
-    while True:
-        try:
-            for city in list(manager.city_subscribers.keys()):
-                if len(manager.city_subscribers[city]) > 0:
-                    await send_city_price_update(city)
-            await asyncio.sleep(10)
-        except Exception as e:
-            logger.error(f"Price update task error: {e}")
-            await asyncio.sleep(10)
+# Background periodic task removed - using event-driven updates only
+# Prices now update only when:
+# 1. New driver/rider registers (via /api/register)
+# 2. Supply/demand is manually updated (via /api/supply-demand)
+# This prevents duplicate updates and provides a better user experience
 
 if __name__ == "__main__":
     import uvicorn
