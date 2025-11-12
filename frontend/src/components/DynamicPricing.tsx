@@ -109,10 +109,10 @@ export const DynamicPricing: React.FC<DynamicPricingProps> = ({ userData, onBack
       ws.onopen = () => {
         setIsConnected(true);
         console.log("WebSocket connected");
-        toast({
-          title: "Real-time Updates Connected! 🚀",
-          description: "You'll receive live price updates every 10 seconds.",
-        });
+        // toast({
+        //   title: "Real-time Updates Connected! ",
+        //   // description: "You'll receive live price updates every 10 seconds.",
+        // });
       };
 
       ws.onmessage = (event) => {
@@ -275,7 +275,7 @@ export const DynamicPricing: React.FC<DynamicPricingProps> = ({ userData, onBack
                 <Button
                   onClick={onBack}
                   variant="outline"
-                  className="text-white border-white hover:bg-white hover:text-blue-600"
+                  className="text-black border-white hover:bg-white hover:text-blue-600"
                 >
                   Change User
                 </Button>
@@ -292,13 +292,13 @@ export const DynamicPricing: React.FC<DynamicPricingProps> = ({ userData, onBack
               <CardHeader className="pb-4">
                 <div className="flex justify-between items-center">
                   <CardTitle className="flex items-center space-x-2">
-                    <DollarSign className="w-6 h-6 text-green-600" />
+                    {/* <RupeeSign className="w-6 h-6 text-green-600" /> */}
                     <span>Current Price</span>
                   </CardTitle>
-                  <div className="flex items-center space-x-2">
+                  {/* <div className="flex items-center space-x-2">
                     <Timer className="w-4 h-4 text-gray-500" />
                     <span className="text-sm text-gray-500">Next update in {countdown}s</span>
-                  </div>
+                  </div> */}
                 </div>
               </CardHeader>
               <CardContent>
