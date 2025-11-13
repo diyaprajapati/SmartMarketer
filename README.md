@@ -1,501 +1,547 @@
-# 🚀 SmartMarketer - Advanced ML-Powered Commerce Platform
+# SmartMarketer - ML-Powered Dynamic Pricing System
 
-> **A sophisticated ride-sharing and marketplace system with cutting-edge machine learning capabilities**
+> **A real-time dynamic pricing platform for ride-sharing with machine learning-powered price optimization**
 
-SmartMarketer is an enterprise-grade platform that combines dynamic pricing, demand forecasting, customer intelligence, fraud detection, and personalized recommendations using state-of-the-art machine learning algorithms.
+SmartMarketer is an intelligent pricing system that uses machine learning to dynamically adjust ride prices based on real-time supply and demand, city tiers, time patterns, and market conditions. The system features a modern React frontend and a FastAPI backend with WebSocket support for real-time price updates.
 
 ## 🎯 Project Overview
 
-This project transforms a simple ride-sharing concept into a comprehensive ML-powered commerce platform featuring:
+This project implements a dynamic pricing system with:
 
-- **🧠 Advanced ML Models**: Ensemble learning, deep neural networks, time series forecasting
-- **📊 Real-time Analytics**: Live dashboard with performance monitoring
-- **🔒 Fraud Prevention**: Multi-layered anomaly detection system
-- **👥 Customer Intelligence**: Behavioral analysis and personalized experiences
-- **🔮 Demand Forecasting**: LSTM-based predictive analytics
-- **🎯 Recommendation Engine**: Hybrid collaborative and content-based filtering
-- **⚡ MLOps Pipeline**: Model monitoring, drift detection, and auto-retraining
+- **🧠 ML Model**: Random Forest Regressor for price prediction
+- **📊 Real-time Dashboard**: Live monitoring of city statistics, supply/demand ratios, and pricing
+- **⚡ WebSocket Updates**: Event-driven price updates when riders or drivers register
+- **🏙️ City-Tier System**: 20 cities across 3 tiers (A, B, C) with different pricing strategies
+- **📱 Modern UI**: React + TypeScript frontend with Shadcn UI components
+- **🔌 RESTful API**: FastAPI backend with automatic API documentation
 
 ## 🏗️ System Architecture
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Frontend      │    │   ML Backend    │    │   Data Layer    │
-│   (React)       │◄──►│   (Flask API)   │◄──►│   (Models)      │
+│   Frontend      │    │   ML Backend    │    │   ML Models     │
+│   (React)       │◄──►│   (FastAPI)     │◄──►│   (RandomForest)│
 │                 │    │                 │    │                 │
-│ • Dashboard     │    │ • Ensemble      │    │ • Training Data │
-│ • Analytics     │    │ • Forecasting   │    │ • Model Store   │
-│ • Monitoring    │    │ • Intelligence  │    │ • Monitoring DB │
+│ • Dashboard     │    │ • REST API      │    │ • Pricing Model │
+│ • Live Pricing  │    │ • WebSocket     │    │ • City Tiers    │
+│ • Registration  │    │ • Real-time     │    │ • PKL Files     │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
-## 🤖 Machine Learning Components
+## 📋 Prerequisites
 
-### 1. **Ensemble Pricing Model**
+Before you begin, ensure you have the following installed:
 
-- **Algorithms**: CatBoost, XGBoost, LightGBM, Neural Networks, Random Forest
-- **Features**: Supply-demand dynamics, time patterns, location factors
-- **Performance**: 90%+ R² score with uncertainty quantification
-- **Capabilities**: Price optimization, elasticity analysis, market regime detection
+- **Python 3.8+** (Python 3.10+ recommended)
+- **Node.js 16+** and npm
+- **uv** (Python package manager) - [Install uv](https://github.com/astral-sh/uv)
+- **Git** (for cloning the repository)
 
-### 2. **Demand Forecasting System**
+### Installing uv
 
-- **Models**: LSTM, CNN-LSTM, ARIMA, Exponential Smoothing
-- **Horizon**: Multi-step ahead forecasting (1-168 hours)
-- **Features**: Seasonal decomposition, cyclical encoding, weather integration
-- **Use Cases**: Capacity planning, resource allocation, pricing strategy
-
-### 3. **Customer Intelligence Platform**
-
-- **Segmentation**: K-Means, DBSCAN, Hierarchical clustering
-- **Personalization**: Individual pricing strategies based on CLV and behavior
-- **Churn Prediction**: Random Forest with 87% accuracy
-- **Features**: RFM analysis, behavioral patterns, demographic insights
-
-### 4. **Fraud Detection Engine**
-
-- **Algorithms**: Isolation Forest, One-Class SVM, AutoEncoder, Rule-based
-- **Real-time**: <150ms analysis per transaction
-- **Detection Rate**: 95% with low false positives
-- **Features**: Network analysis, behavioral anomalies, velocity checks
-
-### 5. **Recommendation System**
-
-- **Approaches**: Collaborative filtering, Content-based, Neural CF, Hybrid
-- **Techniques**: Matrix factorization (SVD, NMF), Deep learning embeddings
-- **Performance**: Handles cold-start, provides similarity analysis
-- **Scale**: Supports thousands of users and items efficiently
-
-### 6. **MLOps & Monitoring**
-
-- **Performance Tracking**: Real-time metrics, alerting system
-- **Drift Detection**: Statistical tests, distribution analysis
-- **Auto-retraining**: Trigger-based model updates
-- **Versioning**: Model lifecycle management
-
-## 🚀 Quick Start
-
-### Prerequisites
+If you don't have `uv` installed:
 
 ```bash
-# Python 3.8+
-pip install -r requirements.txt
+# On macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Includes both Flask and FastAPI dependencies:
-# - Flask: Traditional web framework
-# - FastAPI: Modern async API framework
-# - ML libraries: scikit-learn, tensorflow, xgboost, etc.
+# On Windows (PowerShell)
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 
-# Node.js 16+
-npm install
+# Or via pip
+pip install uv
 ```
 
-## ⚡ FastAPI vs Flask
+## 🚀 Installation & Setup
 
-### **Why FastAPI?**
+### Step 1: Clone the Repository
 
-| Feature             | Flask    | FastAPI            |
-| ------------------- | -------- | ------------------ |
-| **Performance**     | Standard | **2-3x Faster**    |
-| **API Docs**        | Manual   | **Auto-Generated** |
-| **Validation**      | Manual   | **Automatic**      |
-| **Type Safety**     | Optional | **Built-in**       |
-| **Async Support**   | Limited  | **Native**         |
-| **Modern Features** | Basic    | **Advanced**       |
+```bash
+git clone <repository-url>
+cd SmartMarketer
+```
 
-### **FastAPI Benefits:**
+### Step 2: Backend Setup
 
-- 🚀 **High Performance**: Built on Starlette/Uvicorn for speed
-- 📖 **Interactive Docs**: Automatic Swagger UI and ReDoc
-- ✅ **Data Validation**: Pydantic models ensure type safety
-- 🔄 **Async/Await**: Native async support for better concurrency
-- 🎯 **Developer Experience**: Better error messages and IDE support
-
-### Running the System
-
-1. **Start the ML Backend**:
-
-**Option A: FastAPI (Recommended - High Performance)**
+Navigate to the backend directory and set up the Python environment:
 
 ```bash
 cd ml-backend
-python advanced_fastapi.py
-# or use the launcher
-python start_api.py --fastapi
+
+# Create virtual environment using uv
+uv venv
+
+# Activate virtual environment
+# On macOS/Linux:
+source .venv/bin/activate
+
+# On Windows (PowerShell):
+.venv\Scripts\Activate.ps1
+
+# On Windows (Command Prompt):
+.venv\Scripts\activate.bat
+
+# Install Python dependencies
+uv pip install -r requirements.txt
+
+# Install additional dependencies (if needed)
+uv pip install scikit-learn logger llvmlite db-sqlite3 pyod
 ```
 
-**Option B: Flask (Traditional)**
+### Step 3: Train the ML Model
+
+Before running the API, you need to train and save the pricing model:
 
 ```bash
-cd ml-backend
-python advanced_api.py
-# or use the launcher
-python start_api.py --flask
+# Make sure you're in the ml-backend directory
+python train_and_save_model.py
 ```
 
-2. **Start the Frontend**:
+This will:
+
+- Train the Random Forest pricing model
+- Save it to `models/city_pricing_model.pkl`
+- Display training metrics and model performance
+
+**Note**: Training may take a few minutes depending on your system. The model will be saved and reused on subsequent API starts.
+
+### Step 4: Frontend Setup
+
+Open a new terminal and navigate to the frontend directory:
 
 ```bash
 cd frontend
+
+# Install Node.js dependencies
 npm install
+```
+
+## 🎮 Running the Application
+
+You need to run both the backend API and the frontend development server.
+
+### Terminal 1: Start the Backend API
+
+```bash
+cd ml-backend
+
+# Make sure virtual environment is activated
+source .venv/bin/activate  # macOS/Linux
+# OR
+.venv\Scripts\Activate.ps1  # Windows PowerShell
+
+# Start the pricing API server
+python start_pricing_system.py
+```
+
+The API server will start on **http://localhost:8000**
+
+You should see:
+
+```
+🚀 Starting pricing API server...
+INFO:     Started server process
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000
+```
+
+### Terminal 2: Start the Frontend
+
+```bash
+cd frontend
+
+# Start the development server
 npm run dev
 ```
 
-3. **Access the Application**:
+The frontend will start on **http://localhost:5173**
 
-**With FastAPI (Port 8000):**
+You should see:
 
-- **Main App**: http://localhost:5173
+```
+  VITE v5.x.x  ready in xxx ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+```
+
+## 🌐 Accessing the Application
+
+Once both servers are running:
+
+- **Landing Page**: http://localhost:5173/
+- **Live Pricing App**: http://localhost:5173/pricing
 - **ML Dashboard**: http://localhost:5173/dashboard
-- **API Documentation**: http://localhost:8000
-- **Interactive Swagger UI**: http://localhost:8000/docs
-- **ReDoc Documentation**: http://localhost:8000/redoc
+- **API Documentation**: http://localhost:8000/docs (Interactive Swagger UI)
+- **API ReDoc**: http://localhost:8000/redoc (Alternative API docs)
 
-**With Flask (Port 5000):**
+## 📁 Project Structure
 
-- **Main App**: http://localhost:5173
-- **ML Dashboard**: http://localhost:5173/dashboard
-- **API Documentation**: http://localhost:5000
-
-## 📊 API Endpoints
-
-### Core ML Services
-
-#### Pricing & Optimization
-
-```http
-POST /api/pricing/predict
-POST /api/pricing/optimize
-POST /api/pricing/personalized
+```
+SmartMarketer/
+├── frontend/                 # React frontend application
+│   ├── src/
+│   │   ├── components/      # React components
+│   │   │   ├── MLDashboard.tsx      # Main dashboard
+│   │   │   ├── DynamicPricing.tsx   # Pricing interface
+│   │   │   ├── UserRegistration.tsx # User registration
+│   │   │   └── ui/          # Shadcn UI components
+│   │   ├── pages/           # Page components
+│   │   └── App.tsx          # Main app router
+│   ├── package.json
+│   └── vite.config.ts
+│
+├── ml-backend/              # Python backend
+│   ├── api/
+│   │   └── pricing_api.py   # FastAPI application
+│   ├── models/
+│   │   ├── city_pricing_model.py    # ML model class
+│   │   └── city_pricing_model.pkl   # Trained model (generated)
+│   ├── datasets/            # Training data
+│   ├── train_and_save_model.py      # Model training script
+│   ├── start_pricing_system.py      # API startup script
+│   └── requirements.txt     # Python dependencies
+│
+└── README.md
 ```
 
-#### Demand & Forecasting
+## 🔌 API Endpoints
+
+### Core Endpoints
+
+#### Get Available Cities
 
 ```http
-POST /api/demand/forecast
-GET /api/analytics/dashboard
+GET /api/cities
 ```
 
-#### Customer Intelligence
+Returns list of all supported cities grouped by tier.
+
+#### Get City Areas
 
 ```http
-POST /api/customers/segment
-POST /api/customers/churn
+GET /api/cities/{city}/areas
 ```
 
-#### Security & Fraud
+Returns available areas for a specific city.
+
+#### Register User (Rider/Driver)
 
 ```http
-POST /api/fraud/analyze
-GET /api/models/status
+POST /api/register
+Content-Type: application/json
+
+{
+  "user_id": "user123",
+  "user_type": "rider",  // or "driver"
+  "name": "John Doe",
+  "phone": "1234567890",
+  "city": "Mumbai",
+  "area": "Bandra",
+  "rating": 4.5,
+  "trips_completed": 50
+}
 ```
 
-### Example API Usage
+#### Get Price Prediction
 
-**Ensemble Pricing Prediction**:
+```http
+POST /api/price
+Content-Type: application/json
+
+{
+  "city": "Mumbai",
+  "user_type": "rider",
+  "area": "Bandra",
+  "current_riders": 50,
+  "current_drivers": 30,
+  "user_rating": 4.5,
+  "trips_completed": 50
+}
+```
+
+**Note**: The endpoint uses actual city statistics from registered users (maintained via `/api/register` or `/api/supply-demand`), not the values in the request body. The request values are required but ignored to ensure consistent pricing based on real-time supply/demand.
+
+#### Get City Statistics
+
+```http
+GET /api/city-stats
+```
+
+Returns current supply/demand statistics for all cities.
+
+#### Get City Statistics (Single City)
+
+```http
+GET /api/city-stats/{city}
+```
+
+Returns statistics for a specific city.
+
+#### Update Supply/Demand
+
+```http
+POST /api/supply-demand
+Content-Type: application/json
+
+{
+  "city": "Mumbai",
+  "current_riders": 50,
+  "current_drivers": 30
+}
+```
+
+#### Reset City Statistics
+
+```http
+POST /api/city-stats/reset
+```
+
+Clears all city statistics (useful for testing).
+
+### WebSocket Endpoint
+
+#### Real-time Price Updates
 
 ```javascript
-const response = await fetch("/api/pricing/predict", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    features: {
-      Number_of_Riders: 42,
-      Number_of_Drivers: 31,
-      Expected_Ride_Duration: 76,
-      Vehicle_Type_encoded: 1,
-      hour: 14,
-      is_peak_hour: 0,
-    },
-  }),
-});
+const ws = new WebSocket("ws://localhost:8000/ws/{city}");
 
-const result = await response.json();
-// Returns: prediction, uncertainty, feature_importance, model_info
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  console.log("Price update:", data);
+};
 ```
 
-**Fraud Detection**:
+## 🎯 Key Features
 
-```javascript
-const fraudAnalysis = await fetch("/api/fraud/analyze", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    transaction: {
-      amount: 2500.0,
-      hour: 2,
-      merchant_category: "ATM",
-      is_new_device: 1,
-      distance_from_home_km: 200,
-    },
-  }),
-});
+### 1. Dynamic Pricing
 
-const result = await fraudAnalysis.json();
-// Returns: fraud_score, risk_level, recommended_action, triggered_rules
+- Real-time price calculation based on supply/demand ratio
+- City-tier based pricing (Tier A, B, C cities have different base prices)
+- Time-based pricing (peak hours, weekends)
+- Event-driven updates when users register
+
+### 2. ML-Powered Predictions
+
+- Random Forest Regressor model for price prediction
+- Features include:
+  - Current riders and drivers count
+  - Demand/supply ratio
+  - Time of day and day of week
+  - Peak hour detection
+  - City tier and area
+  - User rating and trip history
+
+### 3. Real-time Dashboard
+
+- Live city statistics
+- Supply/demand ratios
+- Sample prices for each city
+- Surge level indicators
+- Last updated timestamps
+
+### 4. User Registration
+
+- Register riders and drivers
+- Automatic price updates on registration
+- WebSocket notifications to connected clients
+
+## 🛠️ Development
+
+### Backend Development
+
+The backend uses FastAPI with the following key files:
+
+- **`api/pricing_api.py`**: Main FastAPI application with all endpoints
+- **`models/city_pricing_model.py`**: ML model class and prediction logic
+- **`train_and_save_model.py`**: Script to train and save the model
+
+### Frontend Development
+
+The frontend uses React + TypeScript + Vite:
+
+- **`src/components/MLDashboard.tsx`**: Main dashboard component
+- **`src/components/DynamicPricing.tsx`**: Pricing interface with WebSocket
+- **`src/components/UserRegistration.tsx`**: User registration form
+
+### Making Changes
+
+1. **Backend Changes**:
+
+   - Edit files in `ml-backend/`
+   - Restart the API server to apply changes
+
+2. **Frontend Changes**:
+
+   - Edit files in `frontend/src/`
+   - Changes are hot-reloaded automatically by Vite
+
+3. **Model Retraining**:
+   - Modify training logic in `train_and_save_model.py`
+   - Run `python train_and_save_model.py` to retrain
+   - Restart API server to load new model
+
+## 🐛 Troubleshooting
+
+### Issue: Model file not found
+
+**Error**: `FileNotFoundError: models/city_pricing_model.pkl`
+
+**Solution**:
+
+```bash
+cd ml-backend
+python train_and_save_model.py
 ```
 
-## 🔬 Model Performance
+### Issue: Port already in use
 
-| Model                     | Metric       | Score | Notes             |
-| ------------------------- | ------------ | ----- | ----------------- |
-| **Ensemble Pricing**      | R² Score     | 0.904 | Cross-validated   |
-| **Demand Forecasting**    | MAPE         | 8.2%  | 24h horizon       |
-| **Customer Segmentation** | Silhouette   | 0.67  | 5 segments        |
-| **Churn Prediction**      | F1-Score     | 0.87  | Balanced dataset  |
-| **Fraud Detection**       | AUC-ROC      | 0.95  | Real-time capable |
-| **Recommendation**        | Precision@10 | 0.78  | Hybrid approach   |
+**Error**: `Address already in use` or `Port 8000 is already in use`
 
-## 🎛️ Features & Capabilities
+**Solution**:
 
-### **Advanced Analytics**
+- Stop any process using port 8000 (backend) or 5173 (frontend)
+- Or change ports in:
+  - Backend: `start_pricing_system.py` or `pricing_api.py`
+  - Frontend: `vite.config.ts`
 
-- ✅ Real-time performance monitoring
-- ✅ Interactive ML dashboard
-- ✅ Model explainability (SHAP values)
-- ✅ A/B testing framework
-- ✅ Business metrics tracking
+### Issue: Module not found errors
 
-### **Production Ready**
+**Error**: `ModuleNotFoundError: No module named 'xxx'`
 
-- ✅ Scalable API architecture
-- ✅ Error handling & logging
-- ✅ Model versioning
-- ✅ Health checks
-- ✅ Documentation
+**Solution**:
 
-### **ML Engineering**
-
-- ✅ Feature engineering pipelines
-- ✅ Cross-validation strategies
-- ✅ Hyperparameter optimization
-- ✅ Ensemble methods
-- ✅ Uncertainty quantification
-
-### **Data Science**
-
-- ✅ Exploratory data analysis
-- ✅ Statistical hypothesis testing
-- ✅ Time series analysis
-- ✅ Clustering & segmentation
-- ✅ Anomaly detection
-
-## 🏆 Technical Highlights
-
-### **Algorithm Sophistication**
-
-- **Meta-Learning**: Ensemble of ensembles with dynamic weighting
-- **Deep Learning**: LSTM networks for sequential data, Neural CF for recommendations
-- **Bayesian Methods**: Uncertainty quantification in predictions
-- **Graph Analytics**: Network-based fraud detection
-- **Optimization**: Economic modeling for price elasticity
-
-### **Engineering Excellence**
-
-- **Microservices**: Modular, independently deployable components
-- **Async Processing**: Non-blocking I/O for high throughput
-- **Caching**: Redis-like caching for model predictions
-- **Monitoring**: Comprehensive observability stack
-- **Testing**: Unit tests, integration tests, model validation
-
-### **Data Pipeline**
-
-- **ETL**: Automated data ingestion and transformation
-- **Feature Store**: Centralized feature management
-- **Model Registry**: Versioned model artifacts
-- **Drift Detection**: Automatic data quality monitoring
-- **Retraining**: Triggered model updates
-
-## 📈 Business Impact
-
-### **Revenue Optimization**
-
-- **Dynamic Pricing**: 15-25% revenue increase through optimal pricing
-- **Demand Forecasting**: 30% reduction in supply-demand mismatch
-- **Personalization**: 20% increase in customer engagement
-
-### **Risk Mitigation**
-
-- **Fraud Prevention**: 95% fraud detection rate, $2M+ in prevented losses
-- **Churn Reduction**: 40% improvement in customer retention
-- **Operational Efficiency**: 50% reduction in manual review processes
-
-### **Customer Experience**
-
-- **Recommendation Quality**: 78% precision in product suggestions
-- **Response Time**: <150ms average API response
-- **Personalization**: Individual customer journey optimization
-
-## 🔮 Advanced Features Showcase
-
-### **1. Ensemble Intelligence**
-
-```python
-# Multi-algorithm ensemble with adaptive weighting
-ensemble = AdvancedEnsemblePricer()
-prediction, uncertainty = ensemble.predict_with_uncertainty(features)
-feature_importance = ensemble.get_feature_importance()
-price_optimization = ensemble.optimize_price(features, target_margin=0.2)
+```bash
+cd ml-backend
+source .venv/bin/activate  # Activate venv
+uv pip install -r requirements.txt
 ```
 
-### **2. Time Series Mastery**
+### Issue: Frontend can't connect to API
 
-```python
-# LSTM-based demand forecasting with seasonality
-forecaster = DemandForecaster(sequence_length=24, forecast_horizon=168)
-forecasts = forecaster.forecast(steps=168, method='ensemble')
-seasonality = forecaster.analyze_seasonality(historical_data)
-```
+**Error**: `Failed to fetch` or CORS errors
 
-### **3. Customer Intelligence**
+**Solution**:
 
-```python
-# Multi-dimensional customer analysis
-segmentation = CustomerSegmentation()
-segments = segmentation.predict_segment(customer_data)
-churn_risk = churn_model.predict_churn_probability(customers)
-personalized_price = pricing.calculate_personalized_price(base_price, customer_features)
-```
+- Ensure backend is running on http://localhost:8000
+- Check `API_BASE` in frontend components matches backend URL
+- Verify CORS is enabled in `pricing_api.py`
 
-### **4. Real-time Fraud Detection**
+### Issue: WebSocket connection fails
 
-```python
-# Multi-layered fraud analysis
-fraud_analysis = fraud_detector.analyze_transaction(transaction)
-network_anomalies = network_analyzer.detect_network_anomalies()
-risk_score = fraud_analysis['fraud_score']
-recommended_action = fraud_analysis['recommended_action']
-```
+**Error**: `WebSocket connection failed`
 
-### **5. Hybrid Recommendations**
+**Solution**:
 
-```python
-# Multi-strategy recommendation engine
-recommendations = rec_engine.recommend_items(user_id, method='hybrid')
-similar_items = rec_engine.get_similar_items(item_id)
-user_preferences = rec_engine.get_user_preferences(user_id)
-```
+- Ensure backend is running
+- Check WebSocket URL format: `ws://localhost:8000/ws/{city}`
+- Verify city name is valid (use cities from `/api/cities`)
 
-## 🎓 Educational Value
+### Issue: Dashboard shows no data
 
-This project demonstrates advanced concepts in:
+**Solution**:
 
-- **Machine Learning**: Ensemble methods, deep learning, time series analysis
-- **MLOps**: Model monitoring, drift detection, automated retraining
-- **Software Engineering**: API design, testing, documentation
-- **Data Science**: Statistical analysis, feature engineering, model evaluation
-- **Business Intelligence**: Metrics, KPIs, ROI analysis
+- Register some users (riders/drivers) via the pricing app
+- Check that `/api/city-stats` returns data
+- Verify backend is running and accessible
 
-## 🏅 Professor Evaluation Points
+## 📊 Model Performance
 
-### **Technical Complexity** ⭐⭐⭐⭐⭐
+The Random Forest pricing model achieves:
 
-- Multi-algorithm ensemble systems
-- Deep learning architectures (LSTM, Neural CF)
-- Real-time fraud detection
-- Advanced statistical methods
-- Production-grade MLOps pipeline
+- **R² Score**: ~0.90+ (90% variance explained)
+- **Prediction Time**: <150ms per request
+- **Features**: 14+ engineered features
+- **Model**: Random Forest Regressor with feature engineering
 
-### **Innovation** ⭐⭐⭐⭐⭐
+## 🏙️ Supported Cities
 
-- Hybrid recommendation systems
-- Economic modeling for pricing
-- Network-based fraud detection
-- Automated model monitoring
-- Uncertainty quantification
+### Tier A Cities (Premium Pricing)
 
-### **Implementation Quality** ⭐⭐⭐⭐⭐
+- Mumbai, Delhi, Bangalore, Chennai, Hyderabad, Kolkata, Pune
 
-- Clean, maintainable code
-- Comprehensive documentation
-- Error handling and logging
-- Testing and validation
-- Scalable architecture
+### Tier B Cities (Standard Pricing)
 
-### **Real-world Application** ⭐⭐⭐⭐⭐
+- Ahmedabad, Jaipur, Surat, Lucknow, Kanpur, Nagpur, Indore
 
-- Business metrics and KPIs
-- Production deployment considerations
-- Performance optimization
-- User experience design
-- Economic impact analysis
+### Tier C Cities (Economy Pricing)
 
-## 🚀 Deployment & Scaling
+- Thane, Bhopal, Visakhapatnam, Patna, Vadodara, Ghaziabad
 
-### **Cloud Architecture**
+Each city has multiple areas with specific pricing zones.
 
-```yaml
-# Kubernetes deployment example
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: smartmarketer-ml-api
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: ml-api
-  template:
-    spec:
-      containers:
-        - name: ml-api
-          image: smartmarketer/ml-api:latest
-          ports:
-            - containerPort: 5000
-          env:
-            - name: MODEL_PATH
-              value: "/models"
-          resources:
-            requests:
-              memory: "2Gi"
-              cpu: "1000m"
-            limits:
-              memory: "4Gi"
-              cpu: "2000m"
-```
+## 🔒 Environment Variables
 
-### **Performance Monitoring**
+Currently, the project uses default configurations. For production, consider adding:
 
-- **Metrics**: Prometheus + Grafana dashboards
-- **Logging**: ELK stack for centralized logging
-- **Tracing**: Jaeger for distributed tracing
-- **Alerting**: PagerDuty integration for critical issues
+- `API_PORT`: Backend port (default: 8000)
+- `FRONTEND_PORT`: Frontend port (default: 5173)
+- `MODEL_PATH`: Path to model file
+- `LOG_LEVEL`: Logging level (INFO, DEBUG, etc.)
 
-## 🎯 Future Enhancements
+## 📝 Notes
 
-### **Advanced ML**
+- The model is trained on synthetic data for demonstration purposes
+- City statistics are stored in-memory and reset on server restart
+- WebSocket connections are per-city (subscribe to specific city updates)
+- Prices are calculated in Indian Rupees (₹)
 
-- [ ] Reinforcement learning for dynamic pricing
-- [ ] Federated learning for privacy-preserving ML
-- [ ] Graph neural networks for recommendation
-- [ ] AutoML for automated model selection
-- [ ] Explainable AI dashboard
+## 🤝 Contributing
 
-### **Platform Features**
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-- [ ] Multi-tenancy support
-- [ ] Real-time streaming analytics
-- [ ] Advanced A/B testing framework
-- [ ] Mobile app with ML features
-- [ ] Voice interface integration
+## 📄 License
 
-### **Business Intelligence**
+This project is for educational purposes as part of a B.Tech project.
 
-- [ ] Advanced analytics suite
-- [ ] Predictive business metrics
-- [ ] Automated report generation
-- [ ] Executive dashboards
-- [ ] ROI tracking and optimization
+## 👨‍💻 Authors
 
-## 👨‍💻 Author
+- **Student 1** - [Student1-ID]
+- **Student 2** - [Student2-ID]
 
-**Dhruv Dabhi**
+**Under the guidance of**: Prof. [Guide Name]
 
-- 🎓 Advanced Machine Learning Implementation
-- 🚀 Full-Stack Development
-- 📊 Data Science & Analytics
-- 🔧 MLOps & Production Systems
+**Institution**: Dharmsinh Desai University, Nadiad
 
 ---
 
-**⭐ This project showcases enterprise-level machine learning engineering with production-ready implementations, advanced algorithms, and comprehensive business applications. Perfect for demonstrating ML expertise to professors and industry professionals!**
+## 🚀 Quick Start Summary
+
+```bash
+# 1. Clone and navigate
+git clone <repo-url>
+cd SmartMarketer
+
+# 2. Backend setup
+cd ml-backend
+uv venv
+source .venv/bin/activate  # or .venv\Scripts\Activate.ps1 on Windows
+uv pip install -r requirements.txt
+uv pip install scikit-learn logger llvmlite db-sqlite3 pyod
+python train_and_save_model.py
+
+# 3. Frontend setup (new terminal)
+cd frontend
+npm install
+
+# 4. Run backend (Terminal 1)
+cd ml-backend
+source .venv/bin/activate
+python start_pricing_system.py
+
+# 5. Run frontend (Terminal 2)
+cd frontend
+npm run dev
+
+# 6. Open browser
+# http://localhost:5173
+```
+
+---
+
+**⭐ If you find this project helpful, please star the repository!**
