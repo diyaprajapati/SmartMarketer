@@ -501,10 +501,10 @@ This project is for educational purposes as part of a B.Tech project.
 
 ## 👨‍💻 Authors
 
-- **Student 1** - [Student1-ID]
-- **Student 2** - [Student2-ID]
+- **Diya** - 22ITUON070
+- **Tisha** - 22ITUBS036
 
-**Under the guidance of**: Prof. [Guide Name]
+**Under the guidance of**: Prof. Dr. Harshadkumar B. Prajapati 
 
 **Institution**: Dharmsinh Desai University, Nadiad
 
