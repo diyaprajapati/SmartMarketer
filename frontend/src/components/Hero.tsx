@@ -17,20 +17,20 @@ export const Hero = () => {
         {/* Badge */}
         <div className="inline-flex items-center gap-2 bg-gradient-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-8 backdrop-blur-sm border border-primary/20">
           <Sparkles className="w-4 h-4" />
-          Welcome to the Future of Smart Commerce
+          ML-Powered Dynamic Pricing for Ride-Sharing
         </div>
 
         {/* Main headline */}
         <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-          Buy Smart, <span className="bg-gradient-primary bg-clip-text text-transparent">Sell Smarter</span>
+          Smart Pricing, <span className="bg-gradient-primary bg-clip-text text-transparent">Real-Time</span>
           <br />
-          with Dynamic Pricing
+          for Ride-Sharing Platforms
         </h1>
 
         {/* Subtitle */}
         <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
-          The platform that connects buyers and sellers with intelligent pricing that adapts to market conditions.
-          Maximize your profits while delivering fair value.
+          Advanced machine learning algorithms that adjust ride prices in real-time based on supply, demand, and market conditions.
+          Maximize revenue while ensuring fair pricing for riders and drivers.
         </p>
 
         {/* CTA Buttons */}
@@ -49,16 +49,16 @@ export const Hero = () => {
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
           <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-primary mb-2">10K+</div>
-            <div className="text-muted-foreground">Active Users</div>
+            <div className="text-3xl md:text-4xl font-bold text-primary mb-2">19</div>
+            <div className="text-muted-foreground">Cities Supported</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-primary mb-2">$2M+</div>
-            <div className="text-muted-foreground">Transactions Processed</div>
+            <div className="text-3xl md:text-4xl font-bold text-primary mb-2">96.7%</div>
+            <div className="text-muted-foreground">Model Accuracy (R²)</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl md:text-4xl font-bold text-primary mb-2">98%</div>
-            <div className="text-muted-foreground">Satisfaction Rate</div>
+            <div className="text-3xl md:text-4xl font-bold text-primary mb-2">&lt;150ms</div>
+            <div className="text-muted-foreground">Real-Time Updates</div>
           </div>
         </div>
       </div>

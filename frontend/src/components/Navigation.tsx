@@ -10,7 +10,7 @@ export const Navigation = () => {
     { label: "Features", href: "#features" },
     { label: "How it Works", href: "#how-it-works" },
     { label: "Live Pricing", href: "/pricing" },
-    { label: "ML Dashboard", href: "/dashboard" },
+    { label: "Dashboard", href: "/dashboard" },
     { label: "Contact", href: "#contact" },
   ];
 

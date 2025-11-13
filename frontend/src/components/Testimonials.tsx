@@ -4,46 +4,46 @@ import { Star, Quote } from "lucide-react";
 export const Testimonials = () => {
   const testimonials = [
     {
-      name: "Sarah Chen",
-      role: "E-commerce Entrepreneur",
-      company: "TechGear Plus",
-      content: "SmartMarketer's dynamic pricing increased our profit margins by 35% while keeping our customers happy. The platform is intuitive and the results speak for themselves.",
+      name: "Rajesh Kumar",
+      role: "Ride-Sharing Platform CEO",
+      company: "CityRide India",
+      content: "SmartMarketer's ML-powered pricing system increased our revenue by 25% while maintaining rider satisfaction. The event-driven updates are incredibly efficient.",
       rating: 5,
-      avatar: "SC"
+      avatar: "RK"
     },
     {
-      name: "Marcus Rodriguez",
-      role: "Marketplace Seller",
-      company: "Artisan Crafts Co.",
-      content: "Finally, a platform that understands the value of my handmade products. The commission structure is fair and the buyer quality is exceptional.",
+      name: "Priya Sharma",
+      role: "Platform Operations Manager",
+      company: "UrbanMobility",
+      content: "The city-tier system and real-time supply/demand balancing have transformed our pricing strategy. The 96.7% model accuracy is impressive.",
       rating: 5,
-      avatar: "MR"
+      avatar: "PS"
     },
     {
-      name: "Emily Watson",
-      role: "Digital Products Seller",
-      company: "Creative Studios",
-      content: "The transaction process is seamless and the pricing intelligence has helped me scale from $10K to $100K in monthly sales within 8 months.",
+      name: "Amit Patel",
+      role: "CTO",
+      company: "RideShare Pro",
+      content: "The WebSocket integration provides instant price updates with minimal latency. Our drivers and riders love the transparency and fairness of the pricing.",
       rating: 5,
-      avatar: "EW"
+      avatar: "AP"
     }
   ];
 
   const useCases = [
     {
-      title: "B2B Software Sales",
-      description: "Enterprise software companies use our platform to optimize pricing for different market segments.",
-      metric: "Average 28% revenue increase"
+      title: "Metropolitan Cities (Tier A)",
+      description: "High-demand cities like Mumbai, Delhi, and Bangalore with premium pricing and complex peak hour patterns.",
+      metric: "1.1-1.5x base multiplier"
     },
     {
-      title: "Digital Marketplace",
-      description: "Online creators and digital product sellers leverage our dynamic pricing for maximum profitability.",
-      metric: "95% seller satisfaction"
+      title: "Major Cities (Tier B)",
+      description: "Cities like Hyderabad, Pune, and Ahmedabad with moderate demand and standard pricing strategies.",
+      metric: "0.7-1.0x base multiplier"
     },
     {
-      title: "Physical Goods Trading",
-      description: "Manufacturers and retailers optimize inventory turnover with intelligent pricing strategies.",
-      metric: "42% faster sales cycles"
+      title: "Developing Cities (Tier C)",
+      description: "Emerging markets with affordable pricing to encourage platform adoption and growth.",
+      metric: "0.4-0.7x base multiplier"
     }
   ];
 
@@ -56,7 +56,7 @@ export const Testimonials = () => {
             What Our <span className="bg-gradient-primary bg-clip-text text-transparent">Users Say</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Join thousands of successful entrepreneurs who have transformed their business with SmartMarketer.
+            Trusted by ride-sharing platforms across India for intelligent, real-time dynamic pricing.
           </p>
         </div>
 
@@ -97,7 +97,7 @@ export const Testimonials = () => {
         <div className="text-center mb-12">
           <h3 className="text-3xl font-bold mb-4">Use Cases</h3>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            See how different industries leverage SmartMarketer to drive growth.
+            See how our city-tier system adapts pricing across different market segments.
           </p>
         </div>
 

@@ -1,24 +1,24 @@
 import { Card } from "@/components/ui/card";
-import { Upload, DollarSign, Handshake } from "lucide-react";
+import { Users, Brain, Zap } from "lucide-react";
 
 export const HowItWorks = () => {
   const steps = [
     {
-      icon: Upload,
-      title: "Submit",
-      description: "Upload your product or service details. Our platform analyzes market conditions and demand patterns.",
+      icon: Users,
+      title: "Register & Connect",
+      description: "Drivers and riders register in their city and area. The system tracks real-time supply (drivers) and demand (riders) across 19 cities.",
       step: "01"
     },
     {
-      icon: DollarSign,
-      title: "We Price",
-      description: "Our AI calculates optimal pricing with smart markup based on market data, competition, and value proposition.",
+      icon: Brain,
+      title: "ML Calculates Price",
+      description: "Our ensemble ML model analyzes supply/demand ratio, city tier, peak hours, and area to calculate optimal dynamic pricing with 96.7% accuracy.",
       step: "02"
     },
     {
-      icon: Handshake,
-      title: "You Sell",
-      description: "Connect with buyers instantly. Our commission system ensures fair transactions for both parties.",
+      icon: Zap,
+      title: "Real-Time Updates",
+      description: "Prices update instantly via WebSocket when new drivers or riders join. Event-driven architecture ensures efficient, responsive pricing.",
       step: "03"
     }
   ];
@@ -31,7 +31,7 @@ export const HowItWorks = () => {
             How It <span className="bg-gradient-primary bg-clip-text text-transparent">Works</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Three simple steps to transform your buying and selling experience with intelligent pricing.
+            Three simple steps to understand how our ML-powered dynamic pricing system works for ride-sharing platforms.
           </p>
         </div>
 

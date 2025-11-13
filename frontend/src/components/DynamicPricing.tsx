@@ -371,7 +371,7 @@ export const DynamicPricing: React.FC<DynamicPricingProps> = ({ userData, onBack
                         {currentPrice?.is_peak_hour ? "Yes" : "No"}
                       </Badge>
                     </div>
-                    <div className="text-2xl font-bold">{currentPrice?.is_peak_hour ? "🔥 Peak" : "✅ Normal"}</div>
+                    <div className="text-2xl font-bold">{currentPrice?.is_peak_hour ? "Peak" : "Normal"}</div>
                   </div>
 
                   <div className="space-y-2">
@@ -436,7 +436,7 @@ export const DynamicPricing: React.FC<DynamicPricingProps> = ({ userData, onBack
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-gray-500">Rating</span>
-                  <span className="font-medium">⭐ {userData.rating}</span>
+                  <span className="font-medium">{userData.rating}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-gray-500">Trips</span>

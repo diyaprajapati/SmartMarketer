@@ -254,18 +254,26 @@ async def register_user(user: UserRegistration):
 
 @app.post("/api/price")
 async def get_price(request: PriceRequest):
-    """Get current dynamic price - all riders see the same base price based on market conditions"""
+    """Get current dynamic price - all riders see the same base price based on market conditions.
+    Uses actual city_stats from registered users, not request values.
+    """
     try:
         if not pricing_model:
             raise HTTPException(status_code=503, detail="Pricing model not available")
         
-        # Update city stats
+        # IMPORTANT: Use actual city_stats from registered users, NOT the request values
+        # The request values are ignored to prevent fake data from overwriting real stats
         global city_stats
-        city_stats[request.city] = {
-            'riders': request.current_riders,
-            'drivers': request.current_drivers,
-            'last_updated': datetime.now().isoformat()
-        }
+        city_stat = city_stats.get(request.city, {'riders': 0, 'drivers': 0})
+        
+        # Use actual registered user counts, or 0 if no users registered yet
+        actual_riders = max(0, city_stat.get('riders', 0))
+        actual_drivers = max(0, city_stat.get('drivers', 0))
+        
+        # Ensure minimum values for model prediction (model needs at least 1 rider/driver)
+        # If no users registered, use minimum values for base price calculation
+        riders_for_prediction = max(1, actual_riders)
+        drivers_for_prediction = max(1, actual_drivers)
         
         # Use standard values for base price calculation to ensure all riders see the same price
         # In real ride-sharing apps, base price is the same for all users in the same area
@@ -273,13 +281,13 @@ async def get_price(request: PriceRequest):
         STANDARD_RATING = 4.0
         STANDARD_TRIPS = 50
         
-        # Get price prediction using standard values (same for all riders)
+        # Get price prediction using actual registered user counts (with minimum for model)
         price_data = pricing_model.predict_price(
             city=request.city,
             user_type=request.user_type,
             area=request.area,
-            current_riders=request.current_riders,
-            current_drivers=request.current_drivers,
+            current_riders=riders_for_prediction,  # Use actual registered riders (min 1 for model)
+            current_drivers=drivers_for_prediction,  # Use actual registered drivers (min 1 for model)
             user_rating=STANDARD_RATING,  # Use standard value, not user-specific
             trips_completed=STANDARD_TRIPS  # Use standard value, not user-specific
         )
@@ -288,6 +296,11 @@ async def get_price(request: PriceRequest):
         price_data['request_time'] = datetime.now().isoformat()
         price_data['user_type'] = request.user_type
         price_data['area'] = request.area
+        # Include actual stats used for pricing
+        price_data['actual_stats'] = {
+            'riders': actual_riders,
+            'drivers': actual_drivers
+        }
         # Note: user_rating and trips_completed are stored but not used for pricing
         # They can be used for driver matching or loyalty programs in the future
         
@@ -349,6 +362,17 @@ async def get_city_stats_for_city(city: str):
             "ratio": ratio
         },
         "last_updated": stats.get('last_updated', datetime.now().isoformat()),
+        "timestamp": datetime.now().isoformat()
+    }
+
+@app.post("/api/city-stats/reset")
+async def reset_city_stats():
+    """Reset all city stats (useful for testing/development)"""
+    global city_stats
+    city_stats = {}
+    logger.info("City stats reset - all data cleared")
+    return {
+        "message": "City stats reset successfully",
         "timestamp": datetime.now().isoformat()
     }
 

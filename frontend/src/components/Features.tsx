@@ -5,39 +5,39 @@ export const Features = () => {
   const features = [
     {
       icon: TrendingUp,
-      title: "Dynamic Pricing",
-      description: "AI-powered pricing that adapts to market conditions in real-time, ensuring optimal profit margins.",
-      highlight: "Smart Algorithms"
+      title: "ML-Powered Pricing",
+      description: "Ensemble learning model combining Random Forest, XGBoost, LightGBM, and Neural Networks with 96.7% accuracy (R² score).",
+      highlight: "96.7% Accuracy"
     },
     {
       icon: BarChart3,
-      title: "Commission Logic",
-      description: "Transparent fee structure that scales with transaction value, aligning our success with yours.",
-      highlight: "Fair & Transparent"
+      title: "City-Tier System",
+      description: "Intelligent pricing across 19 cities categorized into Tier A (Metropolitan), Tier B (Major), and Tier C (Developing) cities.",
+      highlight: "19 Cities"
     },
     {
       icon: Zap,
-      title: "Easy Transactions",
-      description: "Streamlined checkout process with multiple payment options and instant settlement.",
-      highlight: "Lightning Fast"
+      title: "Event-Driven Updates",
+      description: "Real-time price updates triggered only when new drivers or riders join, reducing computational overhead by 80%.",
+      highlight: "Real-Time"
     },
     {
       icon: Shield,
-      title: "Secure Platform",
-      description: "Enterprise-grade security with end-to-end encryption and fraud protection.",
-      highlight: "Bank-Level Security"
+      title: "Supply/Demand Balance",
+      description: "Dynamic pricing that automatically adjusts based on real-time supply (drivers) and demand (riders) ratios.",
+      highlight: "Auto-Balance"
     },
     {
       icon: Globe,
-      title: "Global Reach",
-      description: "Connect with buyers and sellers worldwide with multi-currency support.",
-      highlight: "Worldwide Access"
+      title: "WebSocket Communication",
+      description: "Instant price updates delivered via WebSocket connections with sub-150ms latency for seamless user experience.",
+      highlight: "Instant Updates"
     },
     {
       icon: Users,
-      title: "Community Driven",
-      description: "Join a thriving marketplace with verified users and quality assurance.",
-      highlight: "Trusted Network"
+      title: "Fair Pricing",
+      description: "All riders see the same base price in the same area, ensuring transparency and fairness in pricing.",
+      highlight: "Transparent"
     }
   ];
 
@@ -49,7 +49,7 @@ export const Features = () => {
             Powerful <span className="bg-gradient-primary bg-clip-text text-transparent">Features</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Everything you need to succeed in the modern marketplace, powered by cutting-edge technology.
+            Advanced machine learning features that power intelligent, real-time pricing for ride-sharing platforms.
           </p>
         </div>
 

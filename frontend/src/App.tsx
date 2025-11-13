@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import PricingApp from "./pages/PricingApp";
 import NotFound from "./pages/NotFound";
+import { AppLayout } from "./components/AppLayout";
 
 const queryClient = new QueryClient();
 
@@ -17,9 +18,27 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Landing page - no sidebar */}
           <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/pricing" element={<PricingApp />} />
+          
+          {/* App routes - with sidebar */}
+          <Route
+            path="/dashboard"
+            element={
+              <AppLayout>
+                <Dashboard />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/pricing"
+            element={
+              <AppLayout>
+                <PricingApp />
+              </AppLayout>
+            }
+          />
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
